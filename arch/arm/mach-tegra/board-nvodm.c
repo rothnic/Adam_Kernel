@@ -1410,7 +1410,7 @@ static void tegra_setup_spi(void) { }
 #endif
 
 #ifdef CONFIG_I2C_TEGRA
-#ifdef CONFIG_TEGRA_ODM_VENTANA
+#if (defined(CONFIG_TEGRA_ODM_VENTANA) || defined(CONFIG_7379Y_V11))
 static struct tegra_i2c_plat_parms tegra_i2c_platform[] = {
 	[0] = {
 		.adapter_nr = 0,
