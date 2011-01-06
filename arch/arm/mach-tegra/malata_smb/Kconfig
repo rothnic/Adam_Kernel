@@ -1,0 +1,78 @@
+if TEGRA_ODM_HARMONY
+
+comment "Malata SMBxxxx platform options"
+
+choice
+	prompt "Select smb platform board"
+	default SMBA1002
+	
+config SMBA1011
+	bool "SMBA1011"
+
+config SMBA1002
+	bool "SMBA1002"
+
+config SMBA1004
+	bool "SMBA1004"
+
+config SMBA1006
+	bool "SMBA1006"
+
+config SMBA1007
+	bool "SMBA1007"
+
+config SMBA8901
+	bool "SMBA8902"
+
+config SMBA9701
+	bool "SMBA9701"
+
+endchoice
+
+comment "Subboard platform"
+
+choice
+	prompt "Select a subboard of SMBA1011"
+	depends on SMBA1011
+endchoice
+
+choice 
+	prompt "Select a subboard of SMBA1002"
+	depends on SMBA1002
+
+endchoice
+
+choice
+	prompt "Select a subboard of SMBA1004"
+	depends on SMBA1004
+endchoice
+
+choice
+	prompt "Select a subboard of SMBA1006"
+	depends on SMBA1006
+	default 7379Y_V20
+
+config 7379Y_V10
+	bool "Board number: 7379Y_V10"
+
+config 7379Y_V11
+	bool "Board number: 7379Y_V11"
+
+endchoice
+
+choice
+	prompt "Select a subboard of SMBA1007"
+	depends on SMBA1007
+endchoice
+
+choice
+	prompt "Select a subboard of SMBA8901"
+	depends on SMBA8901
+endchoice
+
+choice
+	prompt "Select a subboard of SMBA9701"
+	depends on SMBA9701
+endchoice
+
+endif
