@@ -254,8 +254,8 @@ CONFIG_SMBA1006=y
 #
 # Subboard platform
 #
-CONFIG_7379Y_V10=y
-# CONFIG_7379Y_V11 is not set
+# CONFIG_7379Y_V10 is not set
+CONFIG_7379Y_V11=y
 #
 
 # Processor Type
