@@ -74,6 +74,7 @@
 #endif
 
 #include <linux/lis35de_accel.h>
+#include <linux/isl29023_ls.h>
 
 extern NvBool IsBoardTango(void);
 NvRmGpioHandle s_hGpioGlobal;
@@ -1260,7 +1261,6 @@ struct lis35de_platform_data lis35de_pdata = {
 };
 #else
 struct lis35de_platform_data lis35de_pdata = {
-	???
 	.i2c_instance = 0,
 	.i2c_address = LIS35DE_I2C_ADDRESS, 
 	.update_interval = 20, 
@@ -1272,7 +1272,6 @@ struct lis35de_platform_data lis35de_pdata = {
 static struct platform_device lis35de_accelerometer_device = 
 {
 	.name = LIS35DE_DEVICE_NAME, 
-		"accelerometer",
 	.id = -1,
 	.dev = {
 		.platform_data = &lis35de_pdata, 
@@ -1281,10 +1280,31 @@ static struct platform_device lis35de_accelerometer_device =
 #endif
 
 #ifdef CONFIG_INPUT_ISL29023_LS
-static struct platform_device isl29023_ls_device = {
-	.name = "light_sensor",
-	.id = -1,
+
+#if (defined(CONFIG_7379Y_V11))
+struct isl29023_platform_data isl29023_pdata = {
+	.i2c_instance = 1, 
+	.i2c_address = ISL29023_I2C_ADDRESS, 
+	.update_interval = 200, 
+	.intr_gpio = 0, 
 };
+#else
+struct isl29023_platform_data isl29023_pdata = {
+	.i2c_instance = 1, 
+	.i2c_address = ISL29023_I2C_ADDRESS, 
+	.update_interval = 200, 
+	.intr_gpio = 0, 
+};
+#endif
+
+static struct platform_device isl29023_ls_device = {
+	.name = ISL29023_LS_DEVICE_NAME,
+	.id = -1,
+	.dev = {
+		.platform_data = &isl29023_pdata, 
+	}, 
+};
+
 #endif
 
 #ifdef CONFIG_SWITCH_H2W
