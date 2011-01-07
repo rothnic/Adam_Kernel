@@ -26,7 +26,7 @@
 #include <linux/lis35de_accel.h>
 #include "lis35de_accel_priv.h"
 
-#define __LIS35DE_GENERIC_DEBUG__		1
+#define __LIS35DE_GENERIC_DEBUG__		0
 #define __LIS35DE_HIGHPASS_FILTER__		1
 
 #if __LIS35DE_HIGHPASS_FILTER__
