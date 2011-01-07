@@ -4,62 +4,15 @@
  * By          : LiuZheng xmlz@malata.com 2010/04/23
  */
 
-#ifndef __LIS35DE_ACCEL_H_INCLUDED__
-#define __LIS35DE_ACCEL_H_INCLUDED__
-
-#define __LIS35DE_GENERIC_DEBUG__	0
-
-#if (__LIS35DE_GENERIC_DEBUG__)
-#define logd(x...)		do { printk(x); } while(0)
-#else
-#define logd(x...)		do {} while(0)
-#endif
-
-#if (__LIS35DE_GENERIC_DEBUG__)
-#define __assert__(x)	do { \
-	if (!(x)) {	\
-		logd("__assert__: in function %s", __func__); \
-		logd("            file:%s\r\n", __FILE__); \
-		logd("            line:%s\r\n", __LINE__); \
-	}\
-} while(0)
-#else
-#define __assert__(x) 	do {} while(0)
-#endif
-
-
-/*
- * LIS35DE i2c paramers
- *
- * I2c address: 
- * SDO = 0: read/write = 0x39/0x38
- * SDO = 1: read/write = 0x3b/0x3a
- */
-#define LIS35DE_I2C_INSTANCE					(0)
-#define LIS35DE_I2C_ADDRESS						(0x38)
-#define LIS35DE_I2C_SPEED_KHZ					(100)
-#define LIS35DE_I2C_TIMEOUT_MS					(1000)
-
-
-/*
- * LIS35DE_UPDATE_INTERVAL
- * How many ms to update and report the accelerometer data.
- *
- * 20Hz will meet the need of the game playing.
- *
- */
-#if (__LIS35DE_GENERIC_DEBUG__)
-#define LIS35DE_UPDATE_INTERVAL					(1000)
-#else
-#define LIS35DE_UPDATE_INTERVAL					(20)//(30)
-#endif
+#ifndef __LIS35DE_ACCEL_PREV_H_INCLUDED__
+#define __LIS35DE_ACCEL_PREV_H_INCLUDED__
 
 /*
  * If CTRL1_FS set to 0, 
  * lis35de typically masurement range is set +2.3~-2.3, precision = 4.6g/2^8 = 18 mg/lsb
  *
  * If CTRL1_FS set to 0,
- * lis35de typically msaurement range is set +9.2~-9.2, precesion = 18.4g/256 = 7mg/lsb
+ * lis35de typically msaurement range is set +9.2~-9.2, precesion = 18.4g/256 = 72mg/lsb
  */
 #define LIS35DE_PRECISION_MG				18
 

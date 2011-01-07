@@ -49,8 +49,8 @@ endchoice
 
 choice
 	prompt "Select a subboard of SMBA1006"
-	depends on SMBA1006
 	default 7379Y_V11
+	depends on SMBA1006
 
 config 7379Y_V10
 	bool "Board number: 7379Y_V10"

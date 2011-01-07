@@ -73,6 +73,8 @@
 #include <linux/input.h>
 #endif
 
+#include <linux/lis35de_accel.h>
+
 extern NvBool IsBoardTango(void);
 NvRmGpioHandle s_hGpioGlobal;
 
@@ -1247,10 +1249,34 @@ static struct platform_device dummy_sensor_device =
 #endif
 
 #ifdef CONFIG_INPUT_LIS35DE_ACCEL
+
+#if (defined(CONFIG_7379Y_V11))
+struct lis35de_platform_data lis35de_pdata = {
+	.i2c_instance = 1,
+	.i2c_address =  LIS35DE_I2C_ADDRESS, 
+	.update_interval = 20, 
+	.intr_gpio = TEGRA_GPIO_PJ0, 
+	.flag = 0, 
+};
+#else
+struct lis35de_platform_data lis35de_pdata = {
+	???
+	.i2c_instance = 0,
+	.i2c_address = LIS35DE_I2C_ADDRESS, 
+	.update_interval = 20, 
+	.intr_gpio = TEGRA_GPIO_PJ0, 
+	.flag = LIS35DE_FLIP_X | LIS35DE_FLIP_Y, 
+};
+#endif
+
 static struct platform_device lis35de_accelerometer_device = 
 {
-	.name = "accelerometer",
+	.name = LIS35DE_DEVICE_NAME, 
+		"accelerometer",
 	.id = -1,
+	.dev = {
+		.platform_data = &lis35de_pdata, 
+	}, 
 };
 #endif
 
