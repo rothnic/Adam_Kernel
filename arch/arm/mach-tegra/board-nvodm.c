@@ -63,6 +63,7 @@
 #include "board.h"
 #include "nvrm_pmu.h"
 #include <linux/switch_dock.h>
+#include <linux/mmc31xx.h>
 
 # define BT_RESET 0
 # define BT_SHUTDOWN 1
@@ -1307,6 +1308,22 @@ static struct platform_device isl29023_ls_device = {
 
 #endif
 
+#ifdef CONFIG_SENSORS_MMC3140
+#ifdef CONFIG_7379Y_V11
+static struct mmc31xx_platform_data mmc31xx_pdata = {
+	.i2c_instance = 1, 
+	.i2c_address = 0x30 << 1, 
+};
+#endif
+static struct platform_device mmc3140_magnetic_sensor_device = {
+	.name = MMC31XX_DEV_NAME,
+	.id = -1,
+	.dev = {
+		.platform_data = &mmc31xx_pdata, 
+	},
+};
+#endif
+
 #ifdef CONFIG_SWITCH_H2W
 	static struct platform_device switch_h2w_device = {
 		.name = "switch-h2w",
@@ -1884,6 +1901,10 @@ void __init tegra_setup_nvodm(bool standard_i2c, bool standard_spi)
 	
 	#ifdef CONFIG_INPUT_ISL29023_LS
 		(void) platform_device_register(&isl29023_ls_device);
+	#endif
+	
+	#ifdef CONFIG_SENSORS_MMC3140
+	(void) platform_device_register(&mmc3140_magnetic_sensor_device);
 	#endif
 	
 	#ifdef CONFIG_INPUT_LIS35DE_ACCEL
