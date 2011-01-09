@@ -64,9 +64,13 @@ gps_control_write_sysfs_enable(struct device *dev,
 
 	logd(TAG "gps_control_write_sysfs_enable() enable=%d\r\n", value);
 
+#ifdef CONFIG_7379Y_V11
+	/* Do notiong here */
+#else
 	down(&gps_control->sem);
 	gps_control_enable(gps_control, value?true:false);
 	up(&gps_control->sem);
+#endif
 	return count;
 }
 
@@ -109,7 +113,16 @@ static int gps_control_probe(struct platform_device *pdev)
 		goto failed_acquire_pin;
 	}
 	NvOdmGpioConfig(dev->gpio_handle, dev->pin_handle, NvOdmGpioPinMode_Output);
+
+#ifdef CONFIG_7379Y_V11
+	/*
+	 * GPS and Magnetic sensor use the sampe power pin on 7379Y_V11, so we
+	 * need to open this power while booting.
+	 */
+	NvOdmGpioSetState(dev->gpio_handle, dev->pin_handle, 1);
+#else
 	NvOdmGpioSetState(dev->gpio_handle, dev->pin_handle, 0);
+#endif
 
 	init_MUTEX(&dev->sem);
 	platform_set_drvdata(pdev, dev);
