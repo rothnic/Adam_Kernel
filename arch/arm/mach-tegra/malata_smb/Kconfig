@@ -40,11 +40,18 @@ choice
 	prompt "Select a subboard of SMBA1002"
 	depends on SMBA1002
 
+config 7265C_V20
+	bool "Board number: 7265C_V20"
+
 endchoice
 
 choice
 	prompt "Select a subboard of SMBA1004"
 	depends on SMBA1004
+
+config 7323C_V21
+	bool "Board number: 7323C_V21"
+
 endchoice
 
 choice
