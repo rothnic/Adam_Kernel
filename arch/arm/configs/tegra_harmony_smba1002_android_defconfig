@@ -241,6 +241,22 @@ CONFIG_TEGRA_ODM_HARMONY=y
 # CONFIG_TEGRA_ODM_WHISTLER is not set
 
 #
+# Malata SMBxxxx platform options
+#
+# CONFIG_SMBA1011 is not set
+CONFIG_SMBA1002=y
+# CONFIG_SMBA1004 is not set
+# CONFIG_SMBA1006 is not set
+# CONFIG_SMBA1007 is not set
+# CONFIG_SMBA8901 is not set
+# CONFIG_SMBA9701 is not set
+
+#
+# Subboard platform
+#
+CONFIG_7265C_V20=y
+
+#
 # Processor Type
 #
 CONFIG_CPU_32=y
