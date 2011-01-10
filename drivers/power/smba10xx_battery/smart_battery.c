@@ -188,7 +188,11 @@ static int battery_power_get_property(struct power_supply *psy,
 			break;
 		case POWER_SUPPLY_PROP_CAPACITY:
 			logd ("POWER_SUPPLY_PROP_CAPACITY\r\n");
+			#ifdef CONFIG_7379Y_V11
+			val->intval = (battery_dev.rsoc<10) ? 0 : (battery_dev.rsoc-3)*100/97;
+			#else
 			val->intval = battery_dev.rsoc;
+			#endif
 			break;
 		case POWER_SUPPLY_PROP_TIME_TO_EMPTY_NOW:
 			logd ("POWER_SUPPLY_PROP_TIME_TO_EMPTY_NOW\r\n");
