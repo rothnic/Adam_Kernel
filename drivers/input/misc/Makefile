@@ -39,3 +39,5 @@ obj-$(CONFIG_INPUT_DUMMY_SENSOR)	+= dummy_sensor.o
 obj-$(CONFIG_INPUT_LIS35DE_ACCEL)	+= lis35de_accel.o
 obj-$(CONFIG_LIGHTSENSOR_TEGRA_ODM)	+= isl29001.o
 obj-$(CONFIG_INPUT_ISL29023_LS)     += isl29023_ls.o
+obj-$(CONFIG_SENSORS_ECOMPASS)		+= mecs.o
+obj-$(CONFIG_SENSORS_MMC3140)		+= mmc31xx.o

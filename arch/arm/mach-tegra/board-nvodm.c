@@ -63,6 +63,9 @@
 #include "board.h"
 #include "nvrm_pmu.h"
 #include <linux/switch_dock.h>
+#include <linux/mmc31xx.h>
+#include <linux/switch_h2w.h>
+#include <linux/leds.h>
 
 # define BT_RESET 0
 # define BT_SHUTDOWN 1
@@ -1299,7 +1302,6 @@ struct lis35de_platform_data lis35de_pdata = {
 static struct platform_device lis35de_accelerometer_device = 
 {
 	.name = LIS35DE_DEVICE_NAME, 
-		"accelerometer",
 	.id = -1,
 	.dev = {
 		.platform_data = &lis35de_pdata, 
@@ -1307,13 +1309,104 @@ static struct platform_device lis35de_accelerometer_device =
 };
 #endif
 
+#ifdef CONFIG_INPUT_ISL29023_LS
+
+#if (defined(CONFIG_7379Y_V11))
+struct isl29023_platform_data isl29023_pdata = {
+	.i2c_instance = 1, 
+	.i2c_address = ISL29023_I2C_ADDRESS, 
+	.update_interval = 200, 
+	.intr_gpio = 0, 
+};
+#else
+struct isl29023_platform_data isl29023_pdata = {
+	.i2c_instance = 1, 
+	.i2c_address = ISL29023_I2C_ADDRESS, 
+	.update_interval = 200, 
+	.intr_gpio = 0, 
+};
+#endif
+
+static struct platform_device isl29023_ls_device = {
+	.name = ISL29023_LS_DEVICE_NAME,
+	.id = -1,
+	.dev = {
+		.platform_data = &isl29023_pdata, 
+	}, 
+};
+
+#endif
+
+#ifdef CONFIG_SENSORS_MMC3140
+#ifdef CONFIG_7379Y_V11
+static struct mmc31xx_platform_data mmc31xx_pdata = {
+	.i2c_instance = 1, 
+	.i2c_address = 0x30 << 1, 
+};
+#endif
+static struct platform_device mmc3140_magnetic_sensor_device = {
+	.name = MMC31XX_DEV_NAME,
+	.id = -1,
+	.dev = {
+		.platform_data = &mmc31xx_pdata, 
+	},
+};
+#endif
+
 #ifdef CONFIG_SWITCH_H2W
-	static struct platform_device switch_h2w_device = {
-		.name = "switch-h2w",
-		.id = -1,
-	};
+#ifdef CONFIG_7379Y_V11
+static struct switch_h2w_platform_data switch_h2w_pdata = {
+	.hp_det_port = 'w' - 'a', 
+	.hp_det_pin = 2, 
+	.hp_det_active_low = 1, 
+	.have_dock_hp = 0, 
+};
+#endif
+
+static struct platform_device switch_h2w_device = {
+	.name = H2W_SWITCH_DEV_NAME, 
+	.id = -1,
+	.dev = {
+		.platform_data = &switch_h2w_pdata, 
+	}, 
+};
 #endif
 	
+#ifdef CONFIG_LEDS_GPIO
+static struct gpio_led gpio_leds[] = {
+#ifdef CONFIG_7379Y_V11
+	{
+		.name = "cpu", 
+		.default_trigger = "heartbeat",
+		.gpio = TEGRA_GPIO_PI3,
+		.active_low = 0,
+		.retain_state_suspended = 0,
+	},
+	{
+		.name = "cpu-busy",
+		.gpio = TEGRA_GPIO_PI4,
+		.active_low = 0,
+		.retain_state_suspended = 0,
+		.default_state = LEDS_GPIO_DEFSTATE_OFF,
+	},
+#endif
+};
+
+static struct gpio_led_platform_data gpio_led_platform_data = {
+	.num_leds = ARRAY_SIZE(gpio_leds),
+	.leds = gpio_leds, 
+	.gpio_blink_set = NULL, 
+};
+
+static struct platform_device gpio_led_platform_device = {
+	.name = "leds-gpio", 
+	.id = -1,
+	.dev = {
+		.platform_data = &gpio_led_platform_data, 
+	}, 
+};
+#endif
+
 static struct platform_device *nvodm_devices[] __initdata = {
 #ifdef CONFIG_RTC_DRV_TEGRA
 	&tegra_rtc_device,
@@ -1882,18 +1975,30 @@ void __init tegra_setup_nvodm(bool standard_i2c, bool standard_spi)
 	(void) platform_device_register(&dummy_sensor_device);
 	#endif
 	
+	#ifdef CONFIG_INPUT_ISL29023_LS
+		(void) platform_device_register(&isl29023_ls_device);
+	#endif
+	
+	#ifdef CONFIG_SENSORS_MMC3140
+	(void) platform_device_register(&mmc3140_magnetic_sensor_device);
+	#endif
+	
 	#ifdef CONFIG_INPUT_LIS35DE_ACCEL
-		(void) platform_device_register(&lis35de_accelerometer_device);
+	(void) platform_device_register(&lis35de_accelerometer_device);
 	#endif
 	
-	#ifdef CONFIG_SWITCH_DOCK//should be initilized before CONFIG_SWITCH_H2W
-		(void) platform_device_register(&switch_dock_device);
+	#ifdef CONFIG_SWITCH_DOCK
+	(void) platform_device_register(&switch_dock_device);
 	#endif
 	
-	#ifdef CONFIG_SWITCH_H2W//should be initilized after CONFIG_SWITCH_DOCK
-		(void) platform_device_register(&switch_h2w_device);
+	#ifdef CONFIG_SWITCH_H2W
+	(void) platform_device_register(&switch_h2w_device);
 	#endif
 		
+	#ifdef CONFIG_LEDS_GPIO
+	(void) platform_device_register(&gpio_led_platform_device);
+	#endif
+
 	tegra_setup_suspend();
 	tegra_setup_reboot();
 }
