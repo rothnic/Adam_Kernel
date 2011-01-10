@@ -64,6 +64,7 @@
 #include "nvrm_pmu.h"
 #include <linux/switch_dock.h>
 #include <linux/mmc31xx.h>
+#include <linux/switch_h2w.h>
 
 # define BT_RESET 0
 # define BT_SHUTDOWN 1
@@ -1325,10 +1326,22 @@ static struct platform_device mmc3140_magnetic_sensor_device = {
 #endif
 
 #ifdef CONFIG_SWITCH_H2W
-	static struct platform_device switch_h2w_device = {
-		.name = "switch-h2w",
-		.id = -1,
-	};
+#ifdef CONFIG_7379Y_V11
+static struct switch_h2w_platform_data switch_h2w_pdata = {
+	.hp_det_port = 'w' - 'a', 
+	.hp_det_pin = 2, 
+	.hp_det_active_low = 1, 
+	.have_dock_hp = 0, 
+};
+#endif
+
+static struct platform_device switch_h2w_device = {
+	.name = H2W_SWITCH_DEV_NAME, 
+	.id = -1,
+	.dev = {
+		.platform_data = &switch_h2w_pdata, 
+	}, 
+};
 #endif
 	
 static struct platform_device *nvodm_devices[] __initdata = {
@@ -1911,11 +1924,11 @@ void __init tegra_setup_nvodm(bool standard_i2c, bool standard_spi)
 		(void) platform_device_register(&lis35de_accelerometer_device);
 	#endif
 	
-	#ifdef CONFIG_SWITCH_DOCK//should be initilized before CONFIG_SWITCH_H2W
+	#ifdef CONFIG_SWITCH_DOCK
 		(void) platform_device_register(&switch_dock_device);
 	#endif
 	
-	#ifdef CONFIG_SWITCH_H2W//should be initilized after CONFIG_SWITCH_DOCK
+	#ifdef CONFIG_SWITCH_H2W
 		(void) platform_device_register(&switch_h2w_device);
 	#endif
 		
