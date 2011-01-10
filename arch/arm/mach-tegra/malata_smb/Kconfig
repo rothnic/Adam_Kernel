@@ -63,6 +63,10 @@ endchoice
 choice
 	prompt "Select a subboard of SMBA1007"
 	depends on SMBA1007
+
+config 7373C_V20
+	bool "Board number: 7373C_V20"
+
 endchoice
 
 choice
