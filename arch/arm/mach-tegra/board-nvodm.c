@@ -1260,7 +1260,6 @@ struct lis35de_platform_data lis35de_pdata = {
 };
 #else
 struct lis35de_platform_data lis35de_pdata = {
-	???
 	.i2c_instance = 0,
 	.i2c_address = LIS35DE_I2C_ADDRESS, 
 	.update_interval = 20, 
