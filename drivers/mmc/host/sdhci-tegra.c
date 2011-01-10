@@ -523,7 +523,7 @@ static int tegra_sdhci_suspend(struct device *dev)
 		/* reduce host controller clk and card clk to 100 KHz */
 		tegra_sdhci_set_clock(sdhost, clock);
 		sdhci_writew(sdhost, 0, SDHCI_CLOCK_CONTROL);
-
+		#if 0 //deleted by navy for getting into standby issue, take totally 15 minutes to get into standby mode
 		if (sdhost->max_clk > clock) {
 			div =  1 << (fls(sdhost->max_clk / clock) - 2);
 			if (div > 128)
@@ -533,7 +533,7 @@ static int tegra_sdhci_suspend(struct device *dev)
 		clk = div << SDHCI_DIVIDER_SHIFT;
 		clk |= SDHCI_CLOCK_INT_EN | SDHCI_CLOCK_CARD_EN;
 		sdhci_writew(sdhost, clk, SDHCI_CLOCK_CONTROL);
-
+		#endif
 		return ret;
 	}
 
