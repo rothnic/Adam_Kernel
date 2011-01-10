@@ -188,8 +188,7 @@ static int battery_power_get_property(struct power_supply *psy,
 			break;
 		case POWER_SUPPLY_PROP_CAPACITY:
 			logd ("POWER_SUPPLY_PROP_CAPACITY\r\n");
-			//val->intval = battery_dev.rsoc;
-			val->intval = (battery_dev.rsoc<10) ? 0 : (battery_dev.rsoc-10)*10/9;
+			val->intval = battery_dev.rsoc;
 			break;
 		case POWER_SUPPLY_PROP_TIME_TO_EMPTY_NOW:
 			logd ("POWER_SUPPLY_PROP_TIME_TO_EMPTY_NOW\r\n");
