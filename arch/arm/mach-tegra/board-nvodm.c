@@ -1354,7 +1354,7 @@ static struct platform_device mmc3140_magnetic_sensor_device = {
 #endif
 
 #ifdef CONFIG_SWITCH_H2W
-#ifdef CONFIG_7379Y_V11
+#if (defined(CONFIG_7379Y_V11) || defined(CONFIG_7373C_V20))
 static struct switch_h2w_platform_data switch_h2w_pdata = {
 	.hp_det_port = 'w' - 'a', 
 	.hp_det_pin = 2, 
