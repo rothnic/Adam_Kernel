@@ -43,6 +43,26 @@ struct gpio_keys_drvdata {
 static unsigned int f4_send_state = 0;
 struct wake_lock f4_wake_lock;
 
+//*****************************************************************************************//
+//Set for recovery-key press driver interface
+int RecoveryKeyValue = 0;
+static ssize_t tegra_touch_show_recoverykey(struct device *dev, struct device_attribute *attr, char *buf)
+{
+	//printk("==tegra_touch_show_recoverykey begin ! == \n");	
+	struct gpio_keys_platform_data *pdata = (struct gpio_keys_platform_data *)dev_get_drvdata(dev);
+
+	if(1 == RecoveryKeyValue){
+		return sprintf(buf, "recoverykey=%d\n", RecoveryKeyValue);
+	}else{
+		return sprintf(buf, "%d\n", RecoveryKeyValue);
+	}
+}
+
+//set Version interface
+static DEVICE_ATTR(recoverykey, S_IRWXUGO, tegra_touch_show_recoverykey, NULL);
+
+//*****************************************************************************************//
+
 static void gpio_keys_report_event(struct work_struct *work)
 {
 	struct gpio_button_data *bdata =
@@ -162,6 +182,9 @@ static int __devinit gpio_keys_probe(struct platform_device *pdev)
 	int i, error;
 	int wakeup = 0;
 
+	int state = 0;
+	int err;
+
 	ddata = kzalloc(sizeof(struct gpio_keys_drvdata) +
 			pdata->nbuttons * sizeof(struct gpio_button_data),
 			GFP_KERNEL);
@@ -252,6 +275,17 @@ static int __devinit gpio_keys_probe(struct platform_device *pdev)
 
 		if (button->wakeup)
 			wakeup = 1;
+		
+		if(button->code==KEY_VOLUMEUP){
+			//printk("gpio_keys_probe KEY_VOLUMEUP=%d\n",KEY_VOLUMEUP);
+			state = (gpio_get_value(button->gpio) ? 1 : 0) ^ button->active_low;
+			//printk("gpio_keys_probe KEY_VOLUMEUP state is %d \n", !!state);
+			if(0 != (!!state)){
+				RecoveryKeyValue = 1;
+			}else{
+				RecoveryKeyValue = 0;
+			}
+		}
 
 		input_set_capability(input, type, button->code);
 	}
@@ -263,6 +297,13 @@ static int __devinit gpio_keys_probe(struct platform_device *pdev)
 		goto fail2;
 	}
 
+	//create recoverykey file,  path  ->   /sys/devices/platform/gpio-keys.3/recoverykey
+	err = device_create_file(&pdev->dev, &dev_attr_recoverykey);
+	if (err) {
+		pr_err("tegra_touch_probe : device_create_file recoverykey failed\n");
+		goto fail2;
+	}
+	
 	device_init_wakeup(&pdev->dev, wakeup);
 
 	return 0;
