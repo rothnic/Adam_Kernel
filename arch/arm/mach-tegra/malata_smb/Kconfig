@@ -42,7 +42,8 @@ choice
 
 config 7265C_V20
 	bool "Board number: 7265C_V20"
-
+config CLIENT_FLEX
+	bool "Client: flex"
 endchoice
 
 choice
@@ -70,6 +71,10 @@ endchoice
 choice
 	prompt "Select a subboard of SMBA1007"
 	depends on SMBA1007
+
+config 7373C_V20
+	bool "Board number: 7373C_V20"
+
 endchoice
 
 choice

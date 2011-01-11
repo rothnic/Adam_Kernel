@@ -166,9 +166,15 @@ static const NvOdmGpioPinKeyInfo s_GpioPinKeyInfo[] = {
 
 // Gpio based keypad
 static const NvOdmGpioPinInfo s_GpioKeyBoard[] = {
+#if defined(CONFIG_7373C_V20)
+	{NVODM_PORT('d'), 4, NvOdmGpioPinActiveState_Low, (void *)&s_GpioPinKeyInfo[0]},
+    {NVODM_PORT('v'), 4, NvOdmGpioPinActiveState_Low, (void *)&s_GpioPinKeyInfo[1]},
+    {NVODM_PORT('v'), 2, NvOdmGpioPinActiveState_Low, (void *)&s_GpioPinKeyInfo[2]},
+#else
 	{NVODM_PORT('v'), 4, NvOdmGpioPinActiveState_Low, (void *)&s_GpioPinKeyInfo[0]},
-    	{NVODM_PORT('d'), 4, NvOdmGpioPinActiveState_Low, (void *)&s_GpioPinKeyInfo[1]},
+    {NVODM_PORT('d'), 4, NvOdmGpioPinActiveState_Low, (void *)&s_GpioPinKeyInfo[1]},
 	{NVODM_PORT('v'), 2, NvOdmGpioPinActiveState_Low, (void *)&s_GpioPinKeyInfo[2]},
+#endif
 	/*
     {NVODM_PORT('q'), 0, NvOdmGpioPinActiveState_Low, (void *)&s_GpioPinKeyInfo[0]},
     {NVODM_PORT('q'), 1, NvOdmGpioPinActiveState_Low, (void *)&s_GpioPinKeyInfo[1]},

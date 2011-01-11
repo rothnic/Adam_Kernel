@@ -79,6 +79,7 @@
 
 #include <linux/lis35de_accel.h>
 #include <linux/isl29023_ls.h>
+#include <linux/so340010_kbd.h>
 
 extern NvBool IsBoardTango(void);
 NvRmGpioHandle s_hGpioGlobal;
@@ -1198,10 +1199,28 @@ static struct platform_device tegra_scrollwheel_device = {
 #endif
 
 #ifdef CONFIG_KEYBOARD_SO340010
-static struct platform_device so340010_kbd_device = 
-{
+
+#if (defined(CONFIG_7373C_V20))
+struct so340010_kbd_platform_data so340010_kbd_pdata = {
+	.i2c_instance = 1,
+    .i2c_address = SO340010_I2C_ADDRESS,
+	.i2c_speed = SO340010_I2C_SPEED,
+	.i2c_timeout = SO340010_I2C_TIMEOUT,
+};
+#else
+struct so340010_kbd_platform_data so340010_kbd_pdata = {
+	.i2c_instance = 0,
+    .i2c_address = SO340010_I2C_ADDRESS,
+    .i2c_speed = SO340010_I2C_SPEED,
+    .i2c_timeout = SO340010_I2C_TIMEOUT,
+};
+#endif
+static struct platform_device so340010_kbd_device = {
 	.name = "so340010_kbd",
 	.id = -1,
+	.dev = {
+		.platform_data = &so340010_kbd_pdata,
+	},
 };
 #endif
 
@@ -1255,7 +1274,7 @@ static struct platform_device dummy_sensor_device =
 
 #ifdef CONFIG_INPUT_LIS35DE_ACCEL
 
-#if (defined(CONFIG_7379Y_V11))
+#if ((defined(CONFIG_7379Y_V11)))
 struct lis35de_platform_data lis35de_pdata = {
 	.i2c_instance = 1,
 	.i2c_address =  LIS35DE_I2C_ADDRESS, 
@@ -1263,13 +1282,23 @@ struct lis35de_platform_data lis35de_pdata = {
 	.intr_gpio = TEGRA_GPIO_PJ0, 
 	.flag = 0, 
 };
-#else
+
+#elif (defined(CONFIG_7373C_V20))
+struct lis35de_platform_data lis35de_pdata = {
+    .i2c_instance = 1,
+    .i2c_address =  LIS35DE_I2C_ADDRESS,
+    .update_interval = 20,
+    .intr_gpio = TEGRA_GPIO_PJ0,
+    .flag = LIS35DE_FLIP_X | LIS35DE_FLIP_Y,
+};
+#else//default configuration
 struct lis35de_platform_data lis35de_pdata = {
 	.i2c_instance = 0,
 	.i2c_address = LIS35DE_I2C_ADDRESS, 
 	.update_interval = 20, 
 	.intr_gpio = TEGRA_GPIO_PJ0, 
-	.flag = LIS35DE_FLIP_X | LIS35DE_FLIP_Y, 
+	//.flag = LIS35DE_FLIP_X | LIS35DE_FLIP_Y, 	
+	.flag = 0,
 };
 #endif
 
@@ -1328,7 +1357,7 @@ static struct platform_device mmc3140_magnetic_sensor_device = {
 #endif
 
 #ifdef CONFIG_SWITCH_H2W
-#ifdef CONFIG_7379Y_V11
+#if (defined(CONFIG_7379Y_V11) || defined(CONFIG_7373C_V20))
 static struct switch_h2w_platform_data switch_h2w_pdata = {
 	.hp_det_port = 'w' - 'a', 
 	.hp_det_pin = 2, 
@@ -1537,7 +1566,7 @@ static void tegra_setup_spi(void) { }
 #endif
 
 #ifdef CONFIG_I2C_TEGRA
-#if (defined(CONFIG_TEGRA_ODM_VENTANA) || defined(CONFIG_7379Y_V11))
+#if (defined(CONFIG_TEGRA_ODM_VENTANA) || defined(CONFIG_7379Y_V11) || defined(CONFIG_7373C_V20))
 static struct tegra_i2c_plat_parms tegra_i2c_platform[] = {
 	[0] = {
 		.adapter_nr = 0,

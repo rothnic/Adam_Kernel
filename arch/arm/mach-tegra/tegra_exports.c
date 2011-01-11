@@ -103,3 +103,6 @@ EXPORT_SYMBOL(NvRmSpiOpen);
 EXPORT_SYMBOL(NvRmSpiClose);
 EXPORT_SYMBOL(NvRmSpiStartTransaction);
 EXPORT_SYMBOL(NvRmSpiGetTransactionData);
+#if (defined(CONFIG_7373C_V20))
+EXPORT_SYMBOL(Nv_WIFI_LED_Control);
+#endif

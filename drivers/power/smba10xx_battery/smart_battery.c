@@ -190,6 +190,8 @@ static int battery_power_get_property(struct power_supply *psy,
 			logd ("POWER_SUPPLY_PROP_CAPACITY\r\n");
 			#ifdef CONFIG_7379Y_V11
 			val->intval = (battery_dev.rsoc<10) ? 0 : (battery_dev.rsoc-3)*100/97;
+			#elif defined(CONFIG_CLIENT_FLEX)
+			val->intval = (battery_dev.rsoc<10) ? 0 : (battery_dev.rsoc-10)*10/9;
 			#else
 			val->intval = battery_dev.rsoc;
 			#endif

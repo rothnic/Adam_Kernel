@@ -375,6 +375,17 @@ NvOdmPeripheralGetBoardInfo(
     NvU16 BoardId,
     NvOdmBoardInfo* pBoardInfo);
 
+#if defined(CONFIG_7373C_V20)
+ /**
+  * Control the wifi LED interface. 
+  *
+  * @param enable Identifies if want to turn on/off the wifi LED.
+  * @return NULL.
+  */
+void
+Nv_WIFI_LED_Control(unsigned int enable);
+#endif
+
 #if defined(__cplusplus)
 }
 #endif
