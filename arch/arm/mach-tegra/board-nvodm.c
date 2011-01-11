@@ -1281,6 +1281,7 @@ struct lis35de_platform_data lis35de_pdata = {
 	.intr_gpio = TEGRA_GPIO_PJ0, 
 	.flag = 0, 
 };
+
 #elif (defined(CONFIG_7373C_V20))
 struct lis35de_platform_data lis35de_pdata = {
     .i2c_instance = 1,
@@ -1289,13 +1290,14 @@ struct lis35de_platform_data lis35de_pdata = {
     .intr_gpio = TEGRA_GPIO_PJ0,
     .flag = LIS35DE_FLIP_X | LIS35DE_FLIP_Y,
 };
-#else
+#else//default configuration
 struct lis35de_platform_data lis35de_pdata = {
 	.i2c_instance = 0,
 	.i2c_address = LIS35DE_I2C_ADDRESS, 
 	.update_interval = 20, 
 	.intr_gpio = TEGRA_GPIO_PJ0, 
-	.flag = LIS35DE_FLIP_X | LIS35DE_FLIP_Y, 
+	//.flag = LIS35DE_FLIP_X | LIS35DE_FLIP_Y, 	
+	.flag = 0,
 };
 #endif
 
