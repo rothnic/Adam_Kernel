@@ -66,6 +66,7 @@
 #include <linux/mmc31xx.h>
 #include <linux/switch_h2w.h>
 #include <linux/leds.h>
+#include <linux/switch_hdmi.h>
 
 # define BT_RESET 0
 # define BT_SHUTDOWN 1
@@ -1345,6 +1346,13 @@ static struct platform_device switch_h2w_device = {
 };
 #endif
 	
+#ifdef CONFIG_SWITCH_HDMI
+static struct platform_device switch_hdmi_device = {
+	.name = HDMI_SWITCH_NAME,
+	.id = -1,
+};
+#endif
+
 #ifdef CONFIG_LEDS_GPIO
 static struct gpio_led gpio_leds[] = {
 #ifdef CONFIG_7379Y_V11
@@ -1973,6 +1981,10 @@ void __init tegra_setup_nvodm(bool standard_i2c, bool standard_spi)
 	
 	#ifdef CONFIG_SWITCH_H2W
 	(void) platform_device_register(&switch_h2w_device);
+	#endif
+	
+	#ifdef CONFIG_SWITCH_HDMI
+	(void) platform_device_register(&switch_hdmi_device);
 	#endif
 		
 	#ifdef CONFIG_LEDS_GPIO
