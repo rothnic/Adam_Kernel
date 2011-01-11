@@ -67,6 +67,8 @@ typedef struct NvOdmTouchDeviceRec *NvOdmTouchDeviceHandle;
 
 #define NVODM_MAX_INPUT_COORDS 5
 
+#define NVODM_MAX_TOUCH_SCREEN_LINE 58
+
 /**
  * @brief Defines the gesture type.
  */
@@ -179,6 +181,15 @@ typedef struct
 
     /// Holds the version of the touchscreen.
     NvU32 Version;
+
+    /// Holds the calibration data of the touchscreen.
+    NvU32 CalibrationData;
+
+    /// Holds the baseline data of the touchscreen.
+    NvS16 BaselineDate[NVODM_MAX_TOUCH_SCREEN_LINE];
+
+    /// Holds the calibrate result of the touchscreen.
+    NvS16 CalibrateResultDate[NVODM_MAX_TOUCH_SCREEN_LINE];
 
 } NvOdmTouchCapabilities;
 
@@ -420,6 +431,25 @@ NvOdmTouchSetCalibration(NvOdmTouchDeviceHandle hDevice);
  */
 NvBool
 NvOdmTouchBurnBootloader(NvOdmTouchDeviceHandle hDevice);
+
+/**
+ * Sets the touch panel baseline data to memony.
+ * @param hDevice A handle to the touch panel.
+ *
+ * @no return.
+ */
+void
+NvOdmTouchSetBaseline(NvOdmTouchDeviceHandle hDevice);
+
+/**
+ * Sets the touch panel calibrat result data to memony.
+ * @param hDevice A handle to the touch panel.
+ *
+ * @no return.
+ */
+void
+NvOdmTouchSetCalibrateResult(NvOdmTouchDeviceHandle hDevice);
+
 
 #if defined(__cplusplus)
 }

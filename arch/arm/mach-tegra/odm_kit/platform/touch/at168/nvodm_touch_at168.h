@@ -71,6 +71,10 @@ NvBool AT168_BurnCandoBootloader(NvOdmTouchDeviceHandle hDevice);
 
 NvBool AT168_BurnBootloader(NvOdmTouchDeviceHandle hDevice);
 
+void AT168_SetBaseline(NvOdmTouchDeviceHandle hDevice);
+
+void AT168_SetCalibrateResult(NvOdmTouchDeviceHandle hDevice);
+
 #if defined(__cplusplus)
 }
 #endif

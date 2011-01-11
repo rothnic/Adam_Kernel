@@ -153,3 +153,14 @@ NvOdmTouchBurnBootloader(NvOdmTouchDeviceHandle hDevice)
     return hDevice->BurnBootloader(hDevice);
 }
 
+void
+NvOdmTouchSetBaseline(NvOdmTouchDeviceHandle hDevice)
+{
+    hDevice->SetBaseline(hDevice);
+}
+
+void
+NvOdmTouchSetCalibrateResult(NvOdmTouchDeviceHandle hDevice)
+{
+    hDevice->SetCalibrateResult(hDevice);
+}
