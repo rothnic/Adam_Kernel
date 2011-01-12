@@ -1225,13 +1225,24 @@ static struct platform_device so340010_kbd_device = {
 #endif
 
 #ifdef CONFIG_SWITCH_DOCK
+#if defined(CONFIG_7265C_V20)
 static struct dock_switch_platform_data dock_switch_data = {
 	.gpio_desktop = 8*('h'-'a')+0,//TEGRA_GPIO_DESKTOP_DOCK;/* Your gpio number*/
 	//.gpio_desktop = 8*('x'-'a')+7,
 	.gpio_desktop_active_low = 0,		/* Is gpio active low ?*/
 	.gpio_car = 0,				/* If donot have an car dock, leave it 0 */
-	.gpio_car = 0,				/* Car dock active low ?*/
+	.gpio_car_active_low = 0,		/* Car dock active low ?*/
 };
+#else
+static struct dock_switch_platform_data dock_switch_data = {
+        .gpio_desktop = 8*('h'-'a')+0,//TEGRA_GPIO_DESKTOP_DOCK;/* Your gpio number*/
+        //.gpio_desktop = 8*('x'-'a')+7,
+        .gpio_desktop_active_low = 1,           /* Is gpio active low ?*/
+        .gpio_car = 0,                          /* If donot have an car dock, leave it 0 */
+        .gpio_car_active_low = 0,               /* Car dock active low ?*/
+};
+
+#endif
 
 static struct platform_device switch_dock_device = {
 	.name = DOCK_SWITCH_NAME,
@@ -1364,6 +1375,14 @@ static struct switch_h2w_platform_data switch_h2w_pdata = {
 	.hp_det_active_low = 1, 
 	.have_dock_hp = 0, 
 };
+#elif defined(CONFIG_7265C_V20)
+static struct switch_h2w_platform_data switch_h2w_pdata = {
+        .hp_det_port = 't' - 'a',
+        .hp_det_pin = 5,
+        .hp_det_active_low = 1,
+        .have_dock_hp = 0,
+};
+
 #endif
 
 static struct platform_device switch_h2w_device = {

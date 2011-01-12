@@ -193,9 +193,9 @@ void misc_write(void)
 
 	/* Write "recovery" in the front of this partition */
 	memset(&boot, 0, sizeof(boot));
-	//strlcpy(boot.command, "boot-recovery", sizeof(boot.command));
-	//strlcpy(boot.recovery, "recovery\n", sizeof(boot.recovery));//force-recovery
-	strlcpy(boot.command, "force", sizeof("boot.command"));
+	strlcpy(boot.command, "boot-recovery", sizeof(boot.command));
+	strlcpy(boot.recovery, "recovery\n", sizeof(boot.recovery));//force-recovery
+	//strlcpy(boot.command, "force", sizeof("boot.command"));
 	
 	if(MAX_KMALLOC_SIZE < 0x20000) {
 		data=kmalloc(MAX_KMALLOC_SIZE, GFP_KERNEL);

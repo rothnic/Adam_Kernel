@@ -257,7 +257,7 @@ CONFIG_SMBA1002=y
 CONFIG_7265C_V20=y
 
 #special for flex
-#CONFIG_CLIENT_FLEX=y
+CONFIG_CLIENT_FLEX=y
 #
 # Processor Type
 #
