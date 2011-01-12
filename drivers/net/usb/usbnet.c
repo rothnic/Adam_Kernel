@@ -973,6 +973,9 @@ fail_pipe:
  			goto fail_halt;
 #endif
 		status = usb_clear_halt (dev->udev, dev->in);
+#if defined(CONFIG_ERICSSON_F3307_ENABLE)
+		usb_autopm_put_interface(dev->intf);
+#endif
 		if (status < 0
 				&& status != -EPIPE
 				&& status != -ESHUTDOWN) {
