@@ -8,3 +8,6 @@ else
 obj-$(CONFIG_SWITCH_DOCK)	+= switch_dock.o
 obj-$(CONFIG_SWITCH_H2W)	+= switch_h2w.o
 endif
+
+obj-$(CONFIG_SWITCH_HDMI)	+= switch_hdmi.o
+

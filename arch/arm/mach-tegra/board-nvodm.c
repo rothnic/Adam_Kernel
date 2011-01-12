@@ -66,6 +66,7 @@
 #include <linux/mmc31xx.h>
 #include <linux/switch_h2w.h>
 #include <linux/leds.h>
+#include <linux/switch_hdmi.h>
 
 # define BT_RESET 0
 # define BT_SHUTDOWN 1
@@ -1367,7 +1368,7 @@ static struct platform_device mmc3140_magnetic_sensor_device = {
 #endif
 
 #ifdef CONFIG_SWITCH_H2W
-#ifdef CONFIG_7379Y_V11
+#if (defined(CONFIG_7379Y_V11) || defined(CONFIG_7373C_V20))
 static struct switch_h2w_platform_data switch_h2w_pdata = {
 	.hp_det_port = 'w' - 'a', 
 	.hp_det_pin = 2, 
@@ -1393,6 +1394,13 @@ static struct platform_device switch_h2w_device = {
 };
 #endif
 	
+#ifdef CONFIG_SWITCH_HDMI
+static struct platform_device switch_hdmi_device = {
+	.name = HDMI_SWITCH_NAME,
+	.id = -1,
+};
+#endif
+
 #ifdef CONFIG_LEDS_GPIO
 static struct gpio_led gpio_leds[] = {
 #ifdef CONFIG_7379Y_V11
@@ -1425,6 +1433,13 @@ static struct platform_device gpio_led_platform_device = {
 	.dev = {
 		.platform_data = &gpio_led_platform_data, 
 	}, 
+};
+#endif
+
+#ifdef CONFIG_SMBA1006_BATTERY_LED
+static struct platform_device smba1006_battery_led_platform_device = {
+	.name = "smba1006_battery_led",
+	.id = -1,
 };
 #endif
 
@@ -2015,9 +2030,17 @@ void __init tegra_setup_nvodm(bool standard_i2c, bool standard_spi)
 	#ifdef CONFIG_SWITCH_H2W
 	(void) platform_device_register(&switch_h2w_device);
 	#endif
+	
+	#ifdef CONFIG_SWITCH_HDMI
+	(void) platform_device_register(&switch_hdmi_device);
+	#endif
 		
 	#ifdef CONFIG_LEDS_GPIO
 	(void) platform_device_register(&gpio_led_platform_device);
+	#endif
+	
+	#ifdef CONFIG_SMBA1006_BATTERY_LED
+	(void) platform_device_register(&smba1006_battery_led_platform_device);
 	#endif
 
 	tegra_setup_suspend();
