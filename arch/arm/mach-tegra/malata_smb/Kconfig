@@ -42,6 +42,13 @@ choice
 
 config 7265C_V20
 	bool "Board number: 7265C_V20"
+
+endchoice
+
+choice 
+	prompt "Select a client of 7265C_V20"
+	depends on 7265C_V20
+
 config CLIENT_FLEX
 	bool "Client: flex"
 endchoice
