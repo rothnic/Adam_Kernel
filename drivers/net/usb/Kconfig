@@ -382,7 +382,13 @@ config ERICSSON_F3307_ENABLE
 	depends on USB_USBNET
 	help
 	  This option enables hosting "F3307" USB networking links.
-
+	  
+config USB_NET_QF9700
+	tristate "QF9700 based USB 2.0 10/100 ethernet devices support"
+	depends on USB_USBNET
+	select CRC32
+	help
+	  This option adds support for QF9700 based USB 2.0 10/100 Ethernet adapters.
 config USB_NET_CDC_NCM
     tristate "CDC NCM support"
     depends on USB_USBNET
