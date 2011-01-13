@@ -62,7 +62,11 @@ smb_store_flash_mode(struct device *device, struct device_attribute *attr, const
 	struct smb_led_device *smb;
 
 	smb = (struct smb_led_device *) dev_get_drvdata(device);
-	mode = simple_strtol(buffer, NULL, 10);
+	if (count > 2 && (strncmp(buffer, "0x", 2) == 0 || strncmp(buffer, "0X", 2) == 0)) {
+		mode = simple_strtol(buffer, NULL, 16);
+	} else {
+		mode = simple_strtol(buffer, NULL, 10);
+	}
 	switch (mode) {
 		case LED_FLASH_NONE:
 		case LED_FLASH_TIMED:
@@ -96,7 +100,11 @@ smb_store_flash_on(struct device *device, struct device_attribute *attr, const c
 	struct smb_led_device *smb;
 
 	smb = (struct smb_led_device *) dev_get_drvdata(device);
-	on = simple_strtol(buffer, NULL, 10);
+	if (count > 2 && (strncmp(buffer, "0x", 2) == 0 || strncmp(buffer, "0X", 2) == 0)) {
+		on = simple_strtol(buffer, NULL, 16);
+	} else {
+		on = simple_strtol(buffer, NULL, 10);
+	}
 	if (smb->set_flash_on && (*smb->set_flash_on)(smb, on) < 0) 
 		return -EFAULT;
 	return count;

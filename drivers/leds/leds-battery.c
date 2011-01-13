@@ -62,7 +62,7 @@ static int battery_led_set_color(struct smb_led_device *led, unsigned int color)
 	logd("battery_led_set_color() IN\r\n");
 	battery_led = container_of(led, struct battery_led_device, led);
 	if (battery_led->color != color) {
-		cancel_delayed_work(&battery_led->work);
+		cancel_delayed_work_sync(&battery_led->work);
 		battery_led->color = color;
 		schedule_delayed_work(&battery_led->work, 0);
 	}
@@ -88,20 +88,18 @@ static int battery_led_set_flash_mode(struct smb_led_device *led, unsigned int m
 	struct battery_led_device *battery_led;
 	logd("battery_led_set_flash_mode() IN\r\n");
 	battery_led = container_of(led, struct battery_led_device, led);
-	if (battery_led->mode != mode) {
-		switch (mode) {
-			case LED_FLASH_TIMED:
-			case LED_FLASH_HARDWARE:
-			case LED_FLASH_NONE:
-				cancel_delayed_work(&battery_led->work);
-				battery_led->mode = mode;
-				battery_led->mode = mode;
-				schedule_delayed_work(&battery_led->work, 0);
+	logd(TAG "mode=%d\n", mode);
+	switch (mode) {
+		case LED_FLASH_TIMED:
+		case LED_FLASH_HARDWARE:
+		case LED_FLASH_NONE:
+			battery_led->mode = mode;
+			schedule_delayed_work(&battery_led->work, 0);
 				break;
 		default:
 			/* Do nothing */
+			logd("unknown flash mode \n");
 			break;
-		}
 	}
 	logd("battery_led_set_flash_mode() OUT\r\n");
 	return 0;
