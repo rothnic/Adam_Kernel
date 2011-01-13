@@ -2348,6 +2348,10 @@ NvBool AT168_Open (NvOdmTouchDeviceHandle* hDevice)
 	if(!AT168_READ(hTouch, AT168_XMAX_LO, InitData, (AT168_VERSION_PROTOCOL - AT168_XMAX_LO + 1)))
 	{
 		//when can not read , xMax and yMax default value is 1024 X 600 .
+		AT168_Capabilities.XMinPosition = 0; //AT168_MIN_X;
+		AT168_Capabilities.YMinPosition = 0; //AT168_MIN_Y;
+		AT168_Capabilities.XMaxPosition = 1024; //AT168_MAX_X;
+		AT168_Capabilities.YMaxPosition = 600; //AT168_MAX_Y;
 		NvOsDebugPrintf("NvOdmTouch_at168:  AT168_Open AT168_READ InitData fail .\n");
 		//return NV_FALSE;
 	}else{
@@ -2366,6 +2370,11 @@ NvBool AT168_Open (NvOdmTouchDeviceHandle* hDevice)
 		AT168_Capabilities.YMinPosition = 0; //AT168_MIN_Y;
 		AT168_Capabilities.XMaxPosition = ((InitData[1] << 8) | (InitData[0])); //AT168_MAX_X;
 		AT168_Capabilities.YMaxPosition = ((InitData[3] << 8) | (InitData[2])); //AT168_MAX_Y;
+
+		if((0 == AT168_Capabilities.XMaxPosition) || (0 == AT168_Capabilities.XMaxPosition)){
+			AT168_Capabilities.XMaxPosition = 1024;
+			AT168_Capabilities.YMaxPosition = 600;
+		}
 	}
 	//Set the Version
 	AT168_Capabilities.Version = ((InitData[4] << 24) | (InitData[5] << 16) | (InitData[6] << 8) | (InitData[7]) );
@@ -2399,7 +2408,7 @@ NvBool AT168_Open (NvOdmTouchDeviceHandle* hDevice)
 	/**********************************************************/
 	*hDevice = &hTouch->OdmTouch;
 	
-	AT168_PRINTF("===NvOdmTouch_at168: AT168_Open success===\n");	
+	AT168_PRINTF(("===NvOdmTouch_at168: AT168_Open success===\n"));	
 	return NV_TRUE;
 
  fail:
