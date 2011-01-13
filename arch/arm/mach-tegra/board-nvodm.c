@@ -80,6 +80,7 @@
 #include <linux/lis35de_accel.h>
 #include <linux/isl29023_ls.h>
 #include <linux/so340010_kbd.h>
+#include <linux/pixel_qi_screen_ctrl.h>
 
 extern NvBool IsBoardTango(void);
 NvRmGpioHandle s_hGpioGlobal;
@@ -1367,6 +1368,16 @@ static struct platform_device mmc3140_magnetic_sensor_device = {
 };
 #endif
 
+#ifdef CONFIG_PIXEL_QI_SCREEN_CTRL
+static struct platform_device pixel_qi_screen_ctrl_device = {
+	.name = PQS_CTRL_DRV_NAME,
+	.dev = {
+		.platform_data = TEGRA_GPIO_PD3, 
+	},
+	.id = -1, 
+};
+#endif
+
 #ifdef CONFIG_SWITCH_H2W
 #if (defined(CONFIG_7379Y_V11) || defined(CONFIG_7373C_V20))
 static struct switch_h2w_platform_data switch_h2w_pdata = {
@@ -2019,6 +2030,10 @@ void __init tegra_setup_nvodm(bool standard_i2c, bool standard_spi)
 	(void) platform_device_register(&mmc3140_magnetic_sensor_device);
 	#endif
 	
+	#ifdef CONFIG_PIXEL_QI_SCREEN_CTRL
+	(void) platform_device_register(&pixel_qi_screen_ctrl_device);
+	#endif
+
 	#ifdef CONFIG_INPUT_LIS35DE_ACCEL
 	(void) platform_device_register(&lis35de_accelerometer_device);
 	#endif
