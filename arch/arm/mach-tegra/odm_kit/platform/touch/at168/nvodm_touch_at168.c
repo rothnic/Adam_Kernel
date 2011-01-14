@@ -2359,7 +2359,7 @@ NvBool AT168_Open (NvOdmTouchDeviceHandle* hDevice)
 		int j = 0;
 		do
 		{
-			AT168_PRINTF(("NvOdmTouch_at168: InitData[%d] = 0x%x---\n", j, InitData[j]));
+			NvOsDebugPrintf("NvOdmTouch_at168: InitData[%d] = 0x%x---\n", j, InitData[j]);
 			j++;
 
 		}while(j < 8);
@@ -2371,7 +2371,11 @@ NvBool AT168_Open (NvOdmTouchDeviceHandle* hDevice)
 		AT168_Capabilities.XMaxPosition = ((InitData[1] << 8) | (InitData[0])); //AT168_MAX_X;
 		AT168_Capabilities.YMaxPosition = ((InitData[3] << 8) | (InitData[2])); //AT168_MAX_Y;
 
-		if((0 == AT168_Capabilities.XMaxPosition) || (0 == AT168_Capabilities.XMaxPosition)){
+		if((0 == AT168_Capabilities.XMaxPosition) 
+				|| (0 == AT168_Capabilities.XMaxPosition)
+				|| (AT168_Capabilities.XMaxPosition >= 61440) //61440 means 0xf000
+				|| (AT168_Capabilities.YMaxPosition >= 61440)){
+			NvOsDebugPrintf("=== xMax yMax from touchscreen FW is %d %d, now set default ===\n", AT168_Capabilities.XMaxPosition, AT168_Capabilities.YMaxPosition);	
 			AT168_Capabilities.XMaxPosition = 1024;
 			AT168_Capabilities.YMaxPosition = 600;
 		}
@@ -2379,30 +2383,8 @@ NvBool AT168_Open (NvOdmTouchDeviceHandle* hDevice)
 	//Set the Version
 	AT168_Capabilities.Version = ((InitData[4] << 24) | (InitData[5] << 16) | (InitData[6] << 8) | (InitData[7]) );
 
-
-	#if 0	 //for old version of hexing touchscreen , when hexing FW update, mask them	
-	if((AT168_Capabilities.XMaxPosition == 1024) && (AT168_Capabilities.YMaxPosition == 600))	
-	{		
-		NvOsDebugPrintf("NvOdmTouch_at168: ---Sintek touchscreen--- Version is %x .\n", AT168_Capabilities.Version);	
-	}	
-	else if((AT168_Capabilities.XMaxPosition == 4096) && (AT168_Capabilities.YMaxPosition == 4096))	
-	{		
-		NvOsDebugPrintf("NvOdmTouch_at168: ---Cando touchscreen--- Version is %x .\n", AT168_Capabilities.Version);		
-	}	
-	else if((AT168_Capabilities.XMaxPosition == 4096) && (AT168_Capabilities.YMaxPosition == 2560))
-	{		
-		NvOsDebugPrintf("NvOdmTouch_at168: ---UniDisplay touchscreen--- Version is %x .\n", AT168_Capabilities.Version);		
-	}	
-	else	
-	{		
-		NvOsDebugPrintf("NvOdmTouch_at168: ---Maybe Old Sintek FW touchscreen--- .\n");		
-		AT168_Capabilities.XMaxPosition = 1024;		
-		AT168_Capabilities.YMaxPosition = 600;		
-		AT168_Capabilities.Version = 0x02000000;	
-	}	
-	#endif
 	AT168_Capabilities.CalibrationData = 0;
-	AT168_PRINTF(("NvOdmTouch_at168: now xMAX is %d   yMAx is %d.\n", AT168_Capabilities.XMaxPosition, AT168_Capabilities.YMaxPosition));
+	NvOsDebugPrintf("NvOdmTouch_at168: now FW xMAX is %d   yMAx is %d Version is %x.\n", AT168_Capabilities.XMaxPosition, AT168_Capabilities.YMaxPosition, AT168_Capabilities.Version);
 	/* change the touchscreen capabilities */
 	NvOdmOsMemcpy(&hTouch->Caps, &AT168_Capabilities, sizeof(NvOdmTouchCapabilities));
 	/**********************************************************/
