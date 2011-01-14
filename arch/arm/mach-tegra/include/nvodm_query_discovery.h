@@ -375,7 +375,6 @@ NvOdmPeripheralGetBoardInfo(
     NvU16 BoardId,
     NvOdmBoardInfo* pBoardInfo);
 
-#if defined(CONFIG_7373C_V20)
  /**
   * Control the wifi LED interface. 
   *
@@ -384,7 +383,6 @@ NvOdmPeripheralGetBoardInfo(
   */
 void
 Nv_WIFI_LED_Control(unsigned int enable);
-#endif
 
 #if defined(__cplusplus)
 }

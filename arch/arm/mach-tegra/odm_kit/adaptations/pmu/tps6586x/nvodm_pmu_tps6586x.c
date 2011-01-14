@@ -1395,8 +1395,6 @@ void DumpTps6586x(NvOdmPmuDeviceHandle hDevice)
 }
 #endif
 
-#if (defined(CONFIG_7373C_V20))
-//just for wifi led
 NvOdmPmuDeviceHandle WIFI_hDevice=NULL;
 
 void Nv_WIFI_LED_Control(unsigned int enable)
@@ -1428,7 +1426,6 @@ void Nv_WIFI_LED_Control(unsigned int enable)
 		break;
 	}
 }
-#endif
 
 NvBool Tps6586xSetup(NvOdmPmuDeviceHandle hDevice)
 {

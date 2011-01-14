@@ -31,6 +31,7 @@ obj-$(CONFIG_LEDS_WM8350)		+= leds-wm8350.o
 obj-$(CONFIG_LEDS_PWM)			+= leds-pwm.o
 obj-$(CONFIG_LEDS_SMB)			+= leds-smb.o
 obj-$(CONFIG_SMBA1006_BATTERY_LED)	+= leds-battery.o
+obj-$(CONFIG_SMB_WIFI_LED)		+= leds-wifi.o
 
 # LED SPI Drivers
 obj-$(CONFIG_LEDS_DAC124S085)		+= leds-dac124s085.o

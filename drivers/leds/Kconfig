@@ -249,6 +249,10 @@ config SMBA1006_BATTERY_LED
 	  This options enable support for LEDS on SMBA1006 (Board number:
 	  7379Y_V11)
 
+config SMB_WIFI_LED
+	tristate "Wifi LED control for SMB platforms"
+	depends on LEDS_SMB
+
 comment "LED Triggers"
 
 config LEDS_TRIGGERS
