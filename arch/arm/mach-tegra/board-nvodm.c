@@ -1335,7 +1335,7 @@ struct isl29023_platform_data isl29023_pdata = {
 };
 #else
 struct isl29023_platform_data isl29023_pdata = {
-	.i2c_instance = 1, 
+	.i2c_instance = 0, 
 	.i2c_address = ISL29023_I2C_ADDRESS, 
 	.update_interval = 200, 
 	.intr_gpio = 0, 
