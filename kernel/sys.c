@@ -357,9 +357,6 @@ EXPORT_SYMBOL_GPL(kernel_power_off);
  *
  * reboot doesn't sync: do that yourself before calling this.
  */
-
-extern void misc_write(void);
-
 SYSCALL_DEFINE4(reboot, int, magic1, int, magic2, unsigned int, cmd,
 		void __user *, arg)
 {
@@ -416,9 +413,6 @@ SYSCALL_DEFINE4(reboot, int, magic1, int, magic2, unsigned int, cmd,
 			return -EFAULT;
 		}
 		buffer[sizeof(buffer) - 1] = '\0';
-		if(strcmp(buffer, "recovery") == 0) {
-		        misc_write();
-		}
 
 		kernel_restart(buffer);
 		break;

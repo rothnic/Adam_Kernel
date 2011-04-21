@@ -2093,9 +2093,8 @@ void sdhci_card_detect_callback(struct sdhci_host *host)
 	}
 
 	spin_unlock_irqrestore(&host->lock, flags);
-	if(!present)
-		mmc_detect_change(host->mmc, msecs_to_jiffies(200));
-	else mmc_detect_change(host->mmc, msecs_to_jiffies(1000));
+
+	mmc_detect_change(host->mmc, msecs_to_jiffies(200));
 }
 EXPORT_SYMBOL_GPL(sdhci_card_detect_callback);
 

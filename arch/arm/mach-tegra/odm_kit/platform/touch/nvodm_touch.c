@@ -22,54 +22,23 @@
 #if defined(NV_TOUCH_TPK)
 #include "nvodm_touch_tpk.h"
 #endif
-
-#if defined(NV_TOUCH_AK4183)
-#include "ak4183/nvodm_touch_ak4183.h"
+#if defined(NV_TOUCH_PANJIT)
+#include "nvodm_touch_panjit.h"
 #endif
 
-#if defined(NV_TOUCH_AT168)
-#include "at168/nvodm_touch_at168.h"
-#endif
-
-static NvU32 driverindex=0;
-
-NvU32 NvOdmTouchDriverIndex(NvU32* pindex)
-{
-    if(pindex) driverindex=*pindex;
-	return driverindex;
-}
 /** Implementation for the NvOdm TouchPad */
 
 NvBool
 NvOdmTouchDeviceOpen( NvOdmTouchDeviceHandle *hDevice )
 {
-    NvBool ret = NV_FALSE;
-	//return NV_FALSE;
+    NvBool ret = NV_TRUE;
 
 #if defined(NV_TOUCH_TPK)
-    if(ret==NV_FALSE&&driverindex==1) 
-	{ 
-		ret = TPK_Open(hDevice);
-	}
-   
+    ret = TPK_Open(hDevice);
 #endif
-
-#if defined(NV_TOUCH_AT168)
-   if(ret==NV_FALSE&&driverindex==2) 
-   	{ 
-		ret = AT168_Open(hDevice);
-	}
+#if defined(NV_TOUCH_PANJIT)
+    ret = PANJIT_Open(hDevice);
 #endif
-
-#if defined(NV_TOUCH_AK4183)
-    if(ret==NV_FALSE&&driverindex==4)
-	{ 
-		ret = AK4183_Open(hDevice);
-	}
-    
-#endif
-
-
 
     return ret;
 }
@@ -139,28 +108,4 @@ NvBool
 NvOdmTouchGetCalibrationData(NvOdmTouchDeviceHandle hDevice, NvU32 NumOfCalibrationData, NvS32* pRawCoordBuffer)
 {
     return hDevice->GetCalibrationData(hDevice, NumOfCalibrationData, pRawCoordBuffer);
-}
-
-void
-NvOdmTouchSetCalibration(NvOdmTouchDeviceHandle hDevice)
-{
-    hDevice->SetCalibration(hDevice);
-}
-
-NvBool
-NvOdmTouchBurnBootloader(NvOdmTouchDeviceHandle hDevice)
-{
-    return hDevice->BurnBootloader(hDevice);
-}
-
-void
-NvOdmTouchSetBaseline(NvOdmTouchDeviceHandle hDevice)
-{
-    hDevice->SetBaseline(hDevice);
-}
-
-void
-NvOdmTouchSetCalibrateResult(NvOdmTouchDeviceHandle hDevice)
-{
-    hDevice->SetCalibrateResult(hDevice);
 }

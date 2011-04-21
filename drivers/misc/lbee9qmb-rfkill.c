@@ -28,7 +28,6 @@
 #include <linux/platform_device.h>
 #include <linux/lbee9qmb-rfkill.h>
 
-#include <linux/kernel.h>
 static int lbee9qmb_rfkill_set_power(void *data, bool blocked)
 {
 	struct platform_device *pdev = data;
@@ -51,7 +50,6 @@ static int lbee9qmb_rfkill_set_power(void *data, bool blocked)
 		if (plat->gpio_pwr!=-1)
 			gpio_set_value(plat->gpio_pwr, 1);
 		gpio_set_value(plat->gpio_reset, 1);
-		msleep(20);
 	} else {
 		gpio_set_value(plat->gpio_reset, 0);
 		regulator_disable(regulator);

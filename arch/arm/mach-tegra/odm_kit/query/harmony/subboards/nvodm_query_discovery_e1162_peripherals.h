@@ -335,7 +335,6 @@
     NvOdmPeripheralClass_Other,
 },
 
-#if 0
 //  ENC28J60 SPI Ethernet module
 {
     NV_ODM_GUID('e','n','c','2','8','j','6','0'),
@@ -343,9 +342,7 @@
     NV_ARRAY_SIZE(s_SpiEthernetAddresses),
     NvOdmPeripheralClass_Other
 },
-#endif
 
-#if 0
 //  SMSC3317 ULPI USB PHY
 {
     NV_ODM_GUID('s','m','s','c','3','3','1','7'),
@@ -353,8 +350,6 @@
     NV_ARRAY_SIZE(s_UlpiUsbAddresses),
     NvOdmPeripheralClass_Other
 },
-#endif
-
 
 //  LVDS LCD Display
 {
@@ -372,7 +367,6 @@
     NvOdmPeripheralClass_Display    
 },
 
-#if 0
 // CRT (based on Concorde 2 design)
 {
     NV_ODM_GUID('f','f','a','_','_','c','r','t'),
@@ -388,7 +382,6 @@
     NV_ARRAY_SIZE(s_ffaVideoDacAddresses),
     NvOdmPeripheralClass_Display
 },
-#endif
 
 // Sdio
 {
@@ -406,7 +399,6 @@
     NvOdmPeripheralClass_Other
 },
 
-#if 0
 // USB Mux J7A1 and J6A1
 {
    NV_ODM_GUID('u','s','b','m','x','J','7','6'),
@@ -415,9 +407,7 @@
     NvOdmPeripheralClass_Other
 
 },
-#endif
 
-#if 0
 // Qwerty key baord for 16x8
 {
     NV_ODM_GUID('q','w','e','r','t','y',' ',' '),
@@ -425,7 +415,6 @@
     NV_ARRAY_SIZE(s_QwertyKeyPad16x8Addresses),
     NvOdmPeripheralClass_HCI
 },
-#endif
 
 // Temperature Monitor (TMON)
 {
@@ -467,7 +456,6 @@
     NvOdmPeripheralClass_Other
 },
 
-#if 0
 // Touch panel
 {
     NV_ODM_GUID('p','a','n','j','i','t','_','0'),
@@ -491,28 +479,5 @@
     NV_ARRAY_SIZE(s_KXTFAcceleroAddresses),
     NvOdmPeripheralClass_Other,
 },
-#endif
+
 // NOTE: This list *must* end with a trailing comma.
-// AK4183 touch screen
-{
-	NV_ODM_GUID('a','k','4','1','8','3','t','s'),
-	s_AK4183Address,
-	NV_ARRAY_SIZE(s_AK4183Address),
-	NvOdmPeripheralClass_HCI
-},
-
-// AT168 touch screen
-{
-	NV_ODM_GUID('a','t','e','1','6','8','t','s'),
-	s_AT168Address,
-	NV_ARRAY_SIZE(s_AT168Address),
-	NvOdmPeripheralClass_HCI
-},
-
-// Bq24745 Battery.
-{
-	NV_ODM_GUID('b','q','2','4','7','4','5',' '),
-	s_Bq24745Address,
-	NV_ARRAY_SIZE(s_Bq24745Address),
-	NvOdmPeripheralClass_Other
-},

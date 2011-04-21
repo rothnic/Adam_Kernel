@@ -88,14 +88,6 @@
 #define TX_PENDING_LEN    30
 /*-------------------------------------------------------------------------*/
 
-#define NETLINK_TO_APP_LEVEL  (1)
-
-#if NETLINK_TO_APP_LEVEL
-
-extern unsigned int LinkPollingTimer_initialized;
-#endif
-
-
 // randomly generated ethernet address
 static u8	node_id [ETH_ALEN];
 
@@ -1064,20 +1056,12 @@ int smscusbnet_open (struct net_device *net)
 	}
 
     dev->intr_urb_delay_submit = FALSE;
-
-#if NETLINK_TO_APP_LEVEL
-    if(LinkPollingTimer_initialized == 0) {
-#endif
-            init_timer(&(dev->LinkPollingTimer));
-            dev->StopLinkPolling=FALSE;
-            dev->LinkPollingTimer.function=smscusbnet_linkpolling;
-            dev->LinkPollingTimer.data=(unsigned long) dev;
-            dev->LinkPollingTimer.expires=jiffies+(2*HZ); //HZ;
-            add_timer(&(dev->LinkPollingTimer));
-#if NETLINK_TO_APP_LEVEL
-            LinkPollingTimer_initialized = 1;
-    }
-#endif
+	init_timer(&(dev->LinkPollingTimer));
+	dev->StopLinkPolling=FALSE;
+	dev->LinkPollingTimer.function=smscusbnet_linkpolling;
+	dev->LinkPollingTimer.data=(unsigned long) dev;
+	dev->LinkPollingTimer.expires=jiffies+HZ;
+	add_timer(&(dev->LinkPollingTimer));
 
 	// insist peer be connected
 	if (info->check_connect && (retval = info->check_connect (dev)) < 0) {
@@ -1323,11 +1307,8 @@ static void myevent(struct work_struct *work)
 				}
 			}
 			if( (!timer_pending(&dev->LinkPollingTimer))){
-                                dev->StopLinkPolling=FALSE;
-                                dev->LinkPollingTimer.function=smscusbnet_linkpolling;
-                                dev->LinkPollingTimer.data=(unsigned long) dev;
-                                dev->LinkPollingTimer.expires=jiffies+(2*HZ); //HZ
-                                add_timer(&(dev->LinkPollingTimer));
+			   dev->LinkPollingTimer.expires=jiffies+HZ;
+			   add_timer(&(dev->LinkPollingTimer));
 			}
 			dev->StopLinkPolling = FALSE;
 			netif_wake_queue (dev->net);
