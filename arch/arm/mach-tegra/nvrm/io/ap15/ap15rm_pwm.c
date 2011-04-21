@@ -350,6 +350,8 @@ void NvRmPwmClose(NvRmPwmHandle hPwm)
 #define MAX_DUTY_CYCLE 255
 #define PWM_FREQ_FACTOR 256
 
+#define HACK_LCD_PWM_MCHI   (1)
+
 NvError NvRmPwmConfig(
     NvRmPwmHandle hPwm,
     NvRmPwmOutputId OutputId,  
@@ -430,6 +432,12 @@ NvError NvRmPwmConfig(
             goto fail;
 
         ClockFreqKHz = (RequestedFreqHzOrPeriod * PWM_FREQ_FACTOR) / 1000;
+
+#if HACK_LCD_PWM_MCHI
+        if(OutputId == 1)
+                ClockFreqKHz = ClockFreqKHz * 4;
+#endif
+
         if (ClockFreqKHz == 0)
             ClockFreqKHz = 1;
 
@@ -466,7 +474,11 @@ NvError NvRmPwmConfig(
         RegValue = PWM_SETNUM(CSR_0, ENB, PwmMode) |
            PWM_SETNUM(CSR_0, PWM_0, DCycle);
 
-        if (s_IsFreqDividerSupported)
+#if HACK_LCD_PWM_MCHI
+        if (s_IsFreqDividerSupported || (OutputId == 1))
+#else
+                if (s_IsFreqDividerSupported)
+#endif
         {
             if ((*pCurrentFreqHzOrPeriod > RequestedFreqHzOrPeriod) &&
                 (RequestedFreqHzOrPeriod != 0))
@@ -474,6 +486,9 @@ NvError NvRmPwmConfig(
                 divider = *pCurrentFreqHzOrPeriod/RequestedFreqHzOrPeriod;
                 if ((*pCurrentFreqHzOrPeriod%RequestedFreqHzOrPeriod)*2>RequestedFreqHzOrPeriod)
                     divider +=1;
+                
+                divider = 3;
+
                 *pCurrentFreqHzOrPeriod = *pCurrentFreqHzOrPeriod / divider;
                 RegValue |= PWM_SETNUM(CSR_0, PFM_0, divider);
             }
